@@ -1,10 +1,10 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DebtManager.Frontend.Api;
 using DebtManager.Frontend.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -33,18 +33,21 @@ public partial class StatisticsViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadProjectionsAsync()
     {
-        if (_api == null) return;
-        
+        if (_api == null)
+            return;
+
         IsLoading = true;
         try
         {
             var userId = SessionManager.Instance.CurrentUserId;
             var projections = await _api.GetProjectionsAsync(userId);
-            
+
             FreeCashFlow = projections.FreeCashFlow;
-            
+
             SnowballPlan = new ObservableCollection<DebtDto>(projections.SnowballPlan.OrderedDebts);
-            AvalanchePlan = new ObservableCollection<DebtDto>(projections.AvalanchePlan.OrderedDebts);
+            AvalanchePlan = new ObservableCollection<DebtDto>(
+                projections.AvalanchePlan.OrderedDebts
+            );
         }
         catch (Exception)
         {

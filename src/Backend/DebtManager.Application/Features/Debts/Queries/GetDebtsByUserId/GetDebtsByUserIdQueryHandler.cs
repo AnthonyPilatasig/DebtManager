@@ -1,11 +1,11 @@
-using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DebtManager.Domain.Entities;
 using DebtManager.Application.Interfaces;
+using DebtManager.Domain.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace DebtManager.Application.Features.Debts.Queries.GetDebtsByUserId;
 
@@ -18,10 +18,13 @@ public class GetDebtsByUserIdQueryHandler : IRequestHandler<GetDebtsByUserIdQuer
         _context = context;
     }
 
-    public async Task<List<Debt>> Handle(GetDebtsByUserIdQuery request, CancellationToken cancellationToken)
+    public async Task<List<Debt>> Handle(
+        GetDebtsByUserIdQuery request,
+        CancellationToken cancellationToken
+    )
     {
-        return await _context.Debts
-            .AsNoTracking()
+        return await _context
+            .Debts.AsNoTracking()
             .Where(d => d.UserId == request.UserId && !d.IsDeleted)
             .ToListAsync(cancellationToken);
     }

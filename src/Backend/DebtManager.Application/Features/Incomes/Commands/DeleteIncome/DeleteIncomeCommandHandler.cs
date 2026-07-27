@@ -1,7 +1,7 @@
-using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using DebtManager.Application.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Incomes.Commands.DeleteIncome;
@@ -17,14 +17,17 @@ public class DeleteIncomeCommandHandler : IRequestHandler<DeleteIncomeCommand, b
 
     public async Task<bool> Handle(DeleteIncomeCommand request, CancellationToken cancellationToken)
     {
-        var income = await _context.Incomes.FirstOrDefaultAsync(i => i.Id == request.IncomeId, cancellationToken);
-        
+        var income = await _context.Incomes.FirstOrDefaultAsync(
+            i => i.Id == request.IncomeId,
+            cancellationToken
+        );
+
         if (income == null)
             return false;
 
         income.IsDeleted = true;
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return true;
     }
 }

@@ -14,10 +14,11 @@ internal sealed class DebtConfiguration : IEntityTypeConfiguration<Debt>
         builder.Property(d => d.TotalBalance).HasPrecision(18, 4);
         builder.Property(d => d.MinimumMonthlyPayment).HasPrecision(18, 4);
         builder.Property(d => d.AnnualInterestRate).HasPrecision(10, 4);
-        
-        builder.HasOne(d => d.User)
-               .WithMany(u => u.Debts)
-               .HasForeignKey(d => d.UserId)
-               .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(d => d.User)
+            .WithMany(u => u.Debts)
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

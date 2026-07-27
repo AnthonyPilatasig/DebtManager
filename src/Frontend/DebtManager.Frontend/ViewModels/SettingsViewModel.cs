@@ -1,9 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DebtManager.Frontend.Api;
 using DebtManager.Frontend.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -24,14 +24,15 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteAccountAsync()
     {
-        if (_api == null) return;
-        
+        if (_api == null)
+            return;
+
         IsLoading = true;
         try
         {
             var userId = SessionManager.Instance.CurrentUserId;
             await _api.DeleteUserAsync(userId);
-            
+
             // Destruir sesión y volver a Onboarding
             SessionManager.Instance.Logout();
             _onLogout?.Invoke();

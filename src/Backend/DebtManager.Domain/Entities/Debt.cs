@@ -20,15 +20,17 @@ public sealed class Debt : Entity
     private Debt() { } // EF Core
 
     public Debt(
-        Guid id, 
-        Guid userId, 
-        string name, 
-        decimal totalBalance, 
-        decimal minimumMonthlyPayment, 
-        decimal annualInterestRate, 
-        int dueDay, 
-        bool isCreditCard, 
-        int? cutoffDay = null) : base(id)
+        Guid id,
+        Guid userId,
+        string name,
+        decimal totalBalance,
+        decimal minimumMonthlyPayment,
+        decimal annualInterestRate,
+        int dueDay,
+        bool isCreditCard,
+        int? cutoffDay = null
+    )
+        : base(id)
     {
         UserId = userId;
         Name = name;
@@ -40,7 +42,13 @@ public sealed class Debt : Entity
         CutoffDay = cutoffDay;
     }
 
-    public void UpdateDetails(string name, decimal totalBalance, decimal minimumMonthlyPayment, decimal annualInterestRate, int dueDay)
+    public void UpdateDetails(
+        string name,
+        decimal totalBalance,
+        decimal minimumMonthlyPayment,
+        decimal annualInterestRate,
+        int dueDay
+    )
     {
         Name = name;
         TotalBalance = totalBalance;

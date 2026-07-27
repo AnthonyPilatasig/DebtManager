@@ -1,9 +1,9 @@
-using DebtManager.Application.Interfaces;
-using DebtManager.Domain.Entities;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DebtManager.Application.Interfaces;
+using DebtManager.Domain.Entities;
+using MediatR;
 
 namespace DebtManager.Application.Features.Debts.Commands.AddDebt;
 

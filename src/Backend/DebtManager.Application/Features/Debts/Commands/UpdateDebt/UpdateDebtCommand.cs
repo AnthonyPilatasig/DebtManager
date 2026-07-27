@@ -1,5 +1,5 @@
-using MediatR;
 using System;
+using MediatR;
 
 namespace DebtManager.Application.Features.Debts.Commands.UpdateDebt;
 
@@ -9,4 +9,5 @@ public record UpdateDebtCommand(
     decimal TotalBalance,
     decimal MinimumMonthlyPayment,
     decimal AnnualInterestRate,
-    int DueDay) : IRequest<bool>;
+    int DueDay
+) : IRequest<bool>;

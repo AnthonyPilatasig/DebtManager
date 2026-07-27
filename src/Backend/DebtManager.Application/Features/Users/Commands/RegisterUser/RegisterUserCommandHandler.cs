@@ -1,10 +1,10 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DebtManager.Domain.Entities;
 using DebtManager.Application.Interfaces;
+using DebtManager.Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Users.Commands.RegisterUser;
 
@@ -19,8 +19,11 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
 
     public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
-        
+        var existingUser = await _context.Users.FirstOrDefaultAsync(
+            u => u.Email == request.Email,
+            cancellationToken
+        );
+
         if (existingUser != null)
             throw new InvalidOperationException("El correo ya está registrado.");
 

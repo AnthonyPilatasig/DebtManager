@@ -1,8 +1,8 @@
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DebtManager.Frontend.Api;
 using DebtManager.Frontend.Services;
-using System;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -22,15 +22,15 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(IDebtManagerApi api)
     {
         _api = api;
-        
+
         // Empezar en Onboarding
         _currentPage = new OnboardingViewModel(_api, OnUserAuthenticated);
         IsPaneOpen = false; // Ocultar sidebar
     }
 
-    public MainViewModel() 
-    { 
-        _currentPage = new OnboardingViewModel(null, () => {});
+    public MainViewModel()
+    {
+        _currentPage = new OnboardingViewModel(null, () => { });
     }
 
     private void OnUserAuthenticated()

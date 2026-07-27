@@ -1,9 +1,9 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DebtManager.Frontend.Api;
-using System;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -44,7 +44,8 @@ public partial class DashboardViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddIncomeAsync()
     {
-        if (_api == null || string.IsNullOrWhiteSpace(NewIncomeName) || NewIncomeAmount <= 0) return;
+        if (_api == null || string.IsNullOrWhiteSpace(NewIncomeName) || NewIncomeAmount <= 0)
+            return;
 
         IsLoading = true;
         try
@@ -73,7 +74,8 @@ public partial class DashboardViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteIncomeAsync(Guid incomeId)
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         IsLoading = true;
         try
         {
@@ -93,17 +95,18 @@ public partial class DashboardViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadDashboardDataAsync()
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
 
         IsLoading = true;
         try
         {
             var userId = Services.SessionManager.Instance.CurrentUserId;
             var debts = await _api.GetDebtsByUserAsync(userId);
-            
+
             decimal totalBalance = 0;
             decimal totalMinimums = 0;
-            foreach(var d in debts) 
+            foreach (var d in debts)
             {
                 totalBalance += d.TotalBalance;
                 totalMinimums += d.MinimumMonthlyPayment;
@@ -115,9 +118,9 @@ public partial class DashboardViewModel : ViewModelBase
 
             var incomesList = await _api.GetIncomesByUserAsync(userId);
             Incomes = new ObservableCollection<IncomeDto>(incomesList);
-            
+
             // BR-02: Semáforo de Riesgo (TE = Compromisos / Ingresos * 100)
-            var totalIncomes = FreeCashFlow + totalMinimums; 
+            var totalIncomes = FreeCashFlow + totalMinimums;
             if (totalIncomes > 0)
             {
                 var te = (totalMinimums / totalIncomes) * 100;

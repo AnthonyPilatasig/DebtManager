@@ -1,7 +1,7 @@
-using DebtManager.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using DebtManager.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Interfaces;
 

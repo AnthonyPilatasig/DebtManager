@@ -1,6 +1,6 @@
 using System;
-using DebtManager.Domain.Primitives;
 using DebtManager.Domain.Enums;
+using DebtManager.Domain.Primitives;
 
 namespace DebtManager.Domain.Entities;
 
@@ -17,7 +17,8 @@ public sealed class Income : Entity
 
     private Income() { } // EF Core
 
-    public Income(Guid id, Guid userId, string description, decimal amount, IncomeType type) : base(id)
+    public Income(Guid id, Guid userId, string description, decimal amount, IncomeType type)
+        : base(id)
     {
         UserId = userId;
         Description = description;

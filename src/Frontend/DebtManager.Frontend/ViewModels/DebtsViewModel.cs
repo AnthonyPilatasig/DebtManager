@@ -1,9 +1,9 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using DebtManager.Frontend.Api;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using DebtManager.Frontend.Api;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -41,13 +41,16 @@ public partial class DebtsViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddDebtAsync()
     {
-        if (_api == null || string.IsNullOrWhiteSpace(NewDebtName)) return;
+        if (_api == null || string.IsNullOrWhiteSpace(NewDebtName))
+            return;
 
         // Si es gasto fijo, ignoramos los valores de saldo y tasa (los forzamos a 0), y solo requerimos cuota mínima
-        if (IsFixedExpense && NewDebtMinimumPayment <= 0) return;
-        
+        if (IsFixedExpense && NewDebtMinimumPayment <= 0)
+            return;
+
         // Si es deuda, requerimos saldo total
-        if (!IsFixedExpense && NewDebtTotalBalance <= 0) return;
+        if (!IsFixedExpense && NewDebtTotalBalance <= 0)
+            return;
 
         var balanceToSave = IsFixedExpense ? 0 : NewDebtTotalBalance;
         var interestToSave = IsFixedExpense ? 0 : NewDebtInterestRate;
@@ -91,7 +94,8 @@ public partial class DebtsViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadDebtsAsync()
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
 
         IsLoading = true;
         try
@@ -113,7 +117,8 @@ public partial class DebtsViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteDebtAsync(Guid debtId)
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         try
         {
             await _api.DeleteDebtAsync(debtId);

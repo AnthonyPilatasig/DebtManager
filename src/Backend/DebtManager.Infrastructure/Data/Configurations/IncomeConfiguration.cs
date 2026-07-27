@@ -12,10 +12,11 @@ internal sealed class IncomeConfiguration : IEntityTypeConfiguration<Income>
         builder.HasKey(i => i.Id);
         builder.Property(i => i.Description).IsRequired().HasMaxLength(150);
         builder.Property(i => i.Amount).HasPrecision(18, 4);
-        
-        builder.HasOne(i => i.User)
-               .WithMany(u => u.Incomes)
-               .HasForeignKey(i => i.UserId)
-               .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(i => i.User)
+            .WithMany(u => u.Incomes)
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,9 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DebtManager.Frontend.Api;
 using DebtManager.Frontend.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace DebtManager.Frontend.ViewModels;
 
@@ -47,8 +47,9 @@ public partial class OnboardingViewModel : ViewModelBase
     [RelayCommand]
     private async Task SubmitAsync()
     {
-        if (_api == null || string.IsNullOrWhiteSpace(Email)) return;
-        
+        if (_api == null || string.IsNullOrWhiteSpace(Email))
+            return;
+
         if (!IsLoginMode && !AcceptedPrivacyPolicy)
         {
             ErrorMessage = "Debes aceptar la política de privacidad para crear tu cuenta.";
@@ -60,7 +61,7 @@ public partial class OnboardingViewModel : ViewModelBase
         try
         {
             var request = new AuthRequest(Email);
-            var response = IsLoginMode 
+            var response = IsLoginMode
                 ? await _api.LoginAsync(request)
                 : await _api.RegisterAsync(request);
 
@@ -72,7 +73,8 @@ public partial class OnboardingViewModel : ViewModelBase
             if (IsLoginMode)
                 ErrorMessage = "Usuario no encontrado. ¿Tal vez querías crear una cuenta?";
             else
-                ErrorMessage = "Error al registrar el usuario. Es posible que el correo ya esté en uso.";
+                ErrorMessage =
+                    "Error al registrar el usuario. Es posible que el correo ya esté en uso.";
         }
         finally
         {

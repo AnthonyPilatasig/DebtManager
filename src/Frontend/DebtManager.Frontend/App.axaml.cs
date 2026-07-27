@@ -1,13 +1,13 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using DebtManager.Frontend.Api;
 using DebtManager.Frontend.ViewModels;
 using DebtManager.Frontend.Views;
-using DebtManager.Frontend.Api;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
-using System;
 
 namespace DebtManager.Frontend;
 
@@ -25,8 +25,9 @@ public partial class App : Application
         var builder = Host.CreateApplicationBuilder();
 
         // 1. Configurar Refit Client apuntando al Backend
-        builder.Services.AddRefitClient<IDebtManagerApi>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7113")); 
+        builder
+            .Services.AddRefitClient<IDebtManagerApi>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7113"));
 
         // 2. Registrar dependencias MVVM
         builder.Services.AddTransient<MainViewModel>();

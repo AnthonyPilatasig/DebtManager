@@ -9,10 +9,4 @@ public record CreateIncomeRequest(
     int Type // 1 = Fixed, 2 = Variable
 );
 
-public record IncomeDto(
-    Guid Id,
-    string Description,
-    decimal Amount,
-    int Type,
-    bool IsActive
-);
+public record IncomeDto(Guid Id, string Description, decimal Amount, int Type, bool IsActive);

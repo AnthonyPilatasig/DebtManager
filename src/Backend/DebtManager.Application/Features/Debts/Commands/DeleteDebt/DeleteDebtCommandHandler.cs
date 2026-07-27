@@ -1,7 +1,7 @@
-using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using DebtManager.Application.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Debts.Commands.DeleteDebt;
@@ -17,13 +17,17 @@ public class DeleteDebtCommandHandler : IRequestHandler<DeleteDebtCommand, bool>
 
     public async Task<bool> Handle(DeleteDebtCommand request, CancellationToken cancellationToken)
     {
-        var debt = await _context.Debts.FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
-        
-        if (debt == null || debt.IsDeleted) return false;
+        var debt = await _context.Debts.FirstOrDefaultAsync(
+            d => d.Id == request.Id,
+            cancellationToken
+        );
+
+        if (debt == null || debt.IsDeleted)
+            return false;
 
         debt.IsDeleted = true;
         debt.LastModifiedAt = System.DateTime.UtcNow;
-        
+
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }

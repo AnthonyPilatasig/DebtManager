@@ -15,8 +15,8 @@ public abstract class Entity
         IsDeleted = false;
     }
 
-    protected Entity() 
-    { 
+    protected Entity()
+    {
         LastModifiedAt = DateTimeOffset.UtcNow;
         IsDeleted = false;
     }

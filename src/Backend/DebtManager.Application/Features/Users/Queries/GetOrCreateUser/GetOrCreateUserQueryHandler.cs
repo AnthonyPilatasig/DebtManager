@@ -1,10 +1,10 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DebtManager.Domain.Entities;
 using DebtManager.Application.Interfaces;
+using DebtManager.Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Users.Queries.GetOrCreateUser;
 
@@ -17,12 +17,17 @@ public class GetOrCreateUserQueryHandler : IRequestHandler<GetOrCreateUserQuery,
         _context = context;
     }
 
-    public async Task<Guid> Handle(GetOrCreateUserQuery request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        GetOrCreateUserQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
-        var existingUser = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == normalizedEmail, cancellationToken);
+        var existingUser = await _context.Users.FirstOrDefaultAsync(
+            u => u.Email == normalizedEmail,
+            cancellationToken
+        );
 
         if (existingUser != null)
         {

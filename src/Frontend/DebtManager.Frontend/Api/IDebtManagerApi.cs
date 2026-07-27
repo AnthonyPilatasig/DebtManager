@@ -1,7 +1,7 @@
-using Refit;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Refit;
 
 namespace DebtManager.Frontend.Api;
 

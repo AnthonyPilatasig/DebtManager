@@ -1,10 +1,10 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DebtManager.Application.Interfaces;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Users.Commands.DeleteUser;
 
@@ -19,11 +19,11 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, bool>
 
     public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .Include(u => u.Debts)
+        var user = await _context
+            .Users.Include(u => u.Debts)
             .Include(u => u.Incomes)
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-            
+
         if (user == null)
             return false;
 
