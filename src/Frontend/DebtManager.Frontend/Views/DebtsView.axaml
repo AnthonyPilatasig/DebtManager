@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             xmlns:api="using:DebtManager.Frontend.Api"
+             x:Class="DebtManager.Frontend.Views.DebtsView"
+             x:DataType="vm:DebtsViewModel">
+             
+    <Grid RowDefinitions="Auto, Auto, *">
+        <StackPanel Grid.Row="0" Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <StackPanel>
+                <TextBlock Text="Mis Deudas" FontSize="32" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="Gestiona tus compromisos financieros" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+            
+            <Button Content="Refrescar" Command="{Binding LoadDebtsCommand}" HorizontalAlignment="Right" Margin="100,0,0,0" Background="{StaticResource SecondaryBrush}" Foreground="White" CornerRadius="8" Padding="16,8"/>
+        </StackPanel>
+
+        <!-- Formulario para agregar deuda -->
+        <ExperimentalAcrylicBorder Grid.Row="1" Classes="Card" Margin="0,0,0,24" Padding="16">
+            <StackPanel Spacing="16">
+                <Grid ColumnDefinitions="*, Auto">
+                    <TextBlock Grid.Column="0" Text="Registrar Nueva Deuda o Gasto" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    <ToggleSwitch Grid.Column="1" IsChecked="{Binding IsFixedExpense}" OnContent="Es Gasto Fijo Personal" OffContent="Es Deuda Normal" Foreground="White"/>
+                </Grid>
+                
+                <WrapPanel Margin="0,8,0,0">
+                    <StackPanel Margin="0,0,16,16" Width="180">
+                        <TextBlock Text="Nombre / Descripción" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0,0,4"/>
+                        <TextBox Text="{Binding NewDebtName}" PlaceholderText="Ej: Tarjeta Visa" CornerRadius="8"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,16" Width="140" IsVisible="{Binding !IsFixedExpense}">
+                        <TextBlock Text="Saldo Total" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0,0,4"/>
+                        <NumericUpDown Value="{Binding NewDebtTotalBalance}" Minimum="0" FormatString="C2" CornerRadius="8"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,16" Width="140">
+                        <TextBlock Text="Cuota o Mensualidad" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0,0,4"/>
+                        <NumericUpDown Value="{Binding NewDebtMinimumPayment}" Minimum="0" FormatString="C2" CornerRadius="8"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,16" Width="140" IsVisible="{Binding !IsFixedExpense}">
+                        <TextBlock Text="Tasa de Interés Anual %" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0,0,4"/>
+                        <NumericUpDown Value="{Binding NewDebtInterestRate}" Minimum="0" Maximum="100" FormatString="F2" CornerRadius="8"/>
+                    </StackPanel>
+
+                    <Button Content="Guardar Registro" Command="{Binding AddDebtCommand}" Background="{StaticResource PrimaryBrush}" Foreground="White" CornerRadius="8" Padding="16,8" VerticalAlignment="Bottom" Margin="0,0,0,16"/>
+                </WrapPanel>
+            </StackPanel>
+        </ExperimentalAcrylicBorder>
+
+        <ScrollViewer Grid.Row="2">
+            <ItemsControl ItemsSource="{Binding Debts}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="api:DebtDto">
+                        <ExperimentalAcrylicBorder Classes="Card" Margin="0,0,0,12" Padding="16">
+                            <Grid ColumnDefinitions="*, Auto, Auto">
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                    <TextBlock Text="{Binding TotalBalance, StringFormat='Saldo Total: {0:C}'}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="24,0">
+                                    <TextBlock Text="{Binding MinimumMonthlyPayment, StringFormat='Pago Mensual: {0:C}'}" FontSize="14" Foreground="White"/>
+                                    <TextBlock Text="{Binding AnnualInterestRate, StringFormat='Tasa Anual: {0:F2}%'}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </StackPanel>
+                                
+                                <Button Grid.Column="2" 
+                                        Content="Eliminar" 
+                                        Command="{ReflectionBinding $parent[UserControl].DataContext.DeleteDebtCommand}"
+                                        CommandParameter="{Binding Id}"
+                                        Background="{StaticResource CriticalBrush}" Foreground="White" 
+                                        VerticalAlignment="Center" CornerRadius="8" Padding="12,8"/>
+                            </Grid>
+                        </ExperimentalAcrylicBorder>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

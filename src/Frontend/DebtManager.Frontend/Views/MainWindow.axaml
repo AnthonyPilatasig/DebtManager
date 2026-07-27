@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DebtManager.Frontend.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+        x:Class="DebtManager.Frontend.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Debt Manager"
+        TransparencyLevelHint="Mica"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, Auto, *">
+        <!-- TitleBar draggable area -->
+        <Border Grid.Row="0" Height="40" Background="Transparent" IsHitTestVisible="False"/>
+
+        <!-- Top Navbar (Multiplatform Mobile/Desktop) -->
+        <Border Grid.Row="1" Height="56" Background="#0A0A0C" IsVisible="{Binding IsAuthenticated}">
+            <Grid ColumnDefinitions="Auto, *, Auto" Margin="8,0">
+                <Button Grid.Column="0" Command="{Binding TogglePaneCommand}" Background="Transparent" Width="48" Height="48" CornerRadius="8">
+                    <TextBlock Text="☰" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                </Button>
+                
+                <TextBlock Grid.Column="1" Text="Debt Manager" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Margin="16,0,0,0"/>
+            </Grid>
+        </Border>
+
+        <SplitView Grid.Row="2" IsPaneOpen="{Binding IsPaneOpen}"
+                   DisplayMode="CompactInline"
+                   OpenPaneLength="220"
+                   CompactPaneLength="0" 
+                   Background="Transparent"
+                   PaneBackground="#0A0A0C">
+            
+            <!-- Sidebar Navigation -->
+            <SplitView.Pane>
+                <StackPanel Spacing="8" Margin="8,16,8,8" IsVisible="{Binding IsAuthenticated}">
+                    <Button Content="📊 Dashboard" 
+                            Command="{Binding NavigateToDashboardCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Height="48"
+                            CornerRadius="8"/>
+                            
+                    <Button Content="💳 Deudas" 
+                            Command="{Binding NavigateToDebtsCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Height="48"
+                            CornerRadius="8"/>
+                            
+                    <Button Content="📈 Estadísticas" 
+                            Command="{Binding NavigateToStatisticsCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Height="48"
+                            CornerRadius="8"/>
+
+                    <Button Content="⚙️ Configuración" 
+                            Command="{Binding NavigateToSettingsCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Height="48"
+                            CornerRadius="8"/>
+
+                    <Button Content="🚪 Salir" 
+                            Command="{Binding LogoutCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Foreground="{StaticResource CriticalBrush}"
+                            Height="48"
+                            Margin="0,40,0,0"
+                            CornerRadius="8"/>
+                </StackPanel>
+            </SplitView.Pane>
+
+            <!-- Main Content Area (SPA routing) -->
+            <SplitView.Content>
+                <Border Padding="16">
+                    <TransitioningContentControl Content="{Binding CurrentPage}" />
+                </Border>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+</Window>

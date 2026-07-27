@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             x:Class="DebtManager.Frontend.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <Grid RowDefinitions="Auto, *">
+        <StackPanel Grid.Row="0" Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <StackPanel>
+                <TextBlock Text="Configuración y Privacidad" FontSize="32" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="Gestiona tu cuenta y tus datos personales" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="24" Margin="0,0,0,40">
+                <ExperimentalAcrylicBorder Classes="Card">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Zona de Peligro (LOPDP / GDPR)" FontSize="18" FontWeight="Bold" Foreground="{StaticResource CriticalBrush}"/>
+                        <TextBlock Text="Al eliminar tu cuenta, todos tus registros financieros (deudas, ingresos) y tu información personal serán borrados permanentemente de nuestros servidores. Esta acción no se puede deshacer." 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextSecondaryBrush}" 
+                                   TextWrapping="Wrap"/>
+                        
+                        <Button Content="Eliminar Mi Cuenta y Mis Datos" 
+                                Command="{Binding DeleteAccountCommand}" 
+                                Background="{StaticResource CriticalBrush}" 
+                                Foreground="White" 
+                                FontSize="16" 
+                                FontWeight="Bold" 
+                                MinHeight="44" 
+                                Padding="24,0"
+                                HorizontalAlignment="Left"
+                                CornerRadius="12"/>
+                    </StackPanel>
+                </ExperimentalAcrylicBorder>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

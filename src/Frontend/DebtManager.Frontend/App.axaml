@@ -1,0 +1,56 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="DebtManager.Frontend.App"
+             xmlns:local="using:DebtManager.Frontend"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <!-- Apple HIG Liquid Glass & System Colors -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#007AFF"/> <!-- System Blue -->
+        <SolidColorBrush x:Key="SecondaryBrush" Color="#5856D6"/> <!-- System Indigo -->
+        <SolidColorBrush x:Key="CriticalBrush" Color="#FF3B30"/> <!-- System Red -->
+        <SolidColorBrush x:Key="WarningBrush" Color="#FFCC00"/> <!-- System Yellow -->
+        <SolidColorBrush x:Key="SuccessBrush" Color="#34C759"/> <!-- System Green -->
+        
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#000000"/>
+        <!-- Fallback if acrylic fails -->
+        <SolidColorBrush x:Key="CardBrush" Color="#1C1C1E" Opacity="0.6"/> 
+        
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#EBEBF5" Opacity="0.6"/>
+        
+        <CornerRadius x:Key="AppleCornerRadius">14</CornerRadius>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <!-- Basic overrides for Apple look -->
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="{StaticResource AppleCornerRadius}"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="MinHeight" Value="44"/> <!-- Apple HIG minimum touch target -->
+        </Style>
+        <Style Selector="Border.Card">
+            <Setter Property="CornerRadius" Value="{StaticResource AppleCornerRadius}"/>
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+        <Style Selector="ExperimentalAcrylicBorder.Card">
+            <Setter Property="CornerRadius" Value="{StaticResource AppleCornerRadius}"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Material">
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="0.8"
+                    MaterialOpacity="0.65" />
+            </Setter>
+        </Style>
+    </Application.Styles>
+</Application>

@@ -1,0 +1,15 @@
+# Avalonia UI Frontend
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Secretos y Entornos
+*.env

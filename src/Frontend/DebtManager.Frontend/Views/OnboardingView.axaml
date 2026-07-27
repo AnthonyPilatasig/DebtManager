@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             x:Class="DebtManager.Frontend.Views.OnboardingView"
+             x:DataType="vm:OnboardingViewModel">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!-- Aurora / Glow de fondo para darle el toque Premium (Elemento Firma) -->
+        <Border Width="400" Height="400" CornerRadius="200" Background="{StaticResource PrimaryBrush}" Opacity="0.15" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="scale(1.2)" />
+        
+        <ExperimentalAcrylicBorder Classes="Card" Width="420" Padding="40" CornerRadius="24">
+            <StackPanel Spacing="24">
+                
+                <!-- Cabecera -->
+                <StackPanel Spacing="4" HorizontalAlignment="Center" Margin="0,0,0,8">
+                    <Border Width="56" Height="56" CornerRadius="16" Background="{StaticResource PrimaryBrush}" Margin="0,0,0,8">
+                        <TextBlock Text="DM" FontSize="24" FontWeight="Black" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Debt Manager" FontSize="28" FontWeight="Black" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Toma el control de tus finanzas personales." Foreground="{StaticResource TextSecondaryBrush}" FontSize="14" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Selector de Modo (Segmented Control) -->
+                <Border Background="#2C2C2E" CornerRadius="12" Height="44" Margin="0,8">
+                    <Grid ColumnDefinitions="*,*">
+                        <!-- Iniciar Sesión -->
+                        <Border Grid.Column="0" Background="{StaticResource PrimaryBrush}" CornerRadius="12" IsVisible="{Binding IsLoginMode}">
+                            <TextBlock Text="Iniciar Sesión" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        </Border>
+                        <Button Grid.Column="0" Content="Iniciar Sesión" Command="{Binding ToggleModeCommand}" Background="Transparent" Foreground="#A0A0A5" IsVisible="{Binding !IsLoginMode}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" CornerRadius="12" FontSize="14"/>
+                        
+                        <!-- Crear Cuenta -->
+                        <Border Grid.Column="1" Background="{StaticResource PrimaryBrush}" CornerRadius="12" IsVisible="{Binding !IsLoginMode}">
+                            <TextBlock Text="Crear Cuenta" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        </Border>
+                        <Button Grid.Column="1" Content="Crear Cuenta" Command="{Binding ToggleModeCommand}" Background="Transparent" Foreground="#A0A0A5" IsVisible="{Binding IsLoginMode}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" CornerRadius="12" FontSize="14"/>
+                    </Grid>
+                </Border>
+
+                <!-- Campo de Entrada -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Correo Electrónico" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0,0,0" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding Email}" PlaceholderText="tu@correo.com" FontSize="16" Padding="16,12" CornerRadius="12" Background="#1C1C1E" BorderBrush="#3A3A3C"/>
+                </StackPanel>
+
+                <!-- Privacidad (Solo visible en Registro) -->
+                <CheckBox Content="Acepto la Política de Privacidad (LOPDP/GDPR)" 
+                          IsChecked="{Binding AcceptedPrivacyPolicy}" 
+                          IsVisible="{Binding !IsLoginMode}"
+                          HorizontalAlignment="Left" 
+                          Foreground="{StaticResource TextSecondaryBrush}"
+                          FontSize="12"
+                          Margin="4,0,0,0"/>
+
+                <!-- Mensaje de Error -->
+                <TextBlock Text="{Binding ErrorMessage}" 
+                           Foreground="{StaticResource CriticalBrush}" 
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" 
+                           HorizontalAlignment="Center" 
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           FontSize="13"/>
+
+                <!-- Botón Principal (CTA) -->
+                <Button Content="{Binding SubmitButtonText}" 
+                        Command="{Binding SubmitCommand}" 
+                        Background="{StaticResource PrimaryBrush}" 
+                        Foreground="White" 
+                        FontSize="16" 
+                        FontWeight="Bold" 
+                        MinHeight="48" 
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" 
+                        CornerRadius="12"
+                        Margin="0,8,0,0"/>
+            </StackPanel>
+        </ExperimentalAcrylicBorder>
+    </Grid>
+</UserControl>

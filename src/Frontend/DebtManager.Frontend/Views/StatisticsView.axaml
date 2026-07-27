@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             xmlns:api="using:DebtManager.Frontend.Api"
+             x:Class="DebtManager.Frontend.Views.StatisticsView"
+             x:DataType="vm:StatisticsViewModel">
+
+    <Grid RowDefinitions="Auto, *">
+        <StackPanel Grid.Row="0" Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <StackPanel>
+                <TextBlock Text="Proyecciones y Estrategias" FontSize="32" FontWeight="Bold" Foreground="White" />
+                <TextBlock Text="Algoritmos de desendeudamiento acelerado" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+            
+            <Button Content="Refrescar" Command="{Binding LoadProjectionsCommand}" HorizontalAlignment="Right" Margin="100,0,0,0" Background="{StaticResource SecondaryBrush}" Foreground="White" CornerRadius="8" Padding="16,8"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="24" Margin="0,0,0,40">
+                <ExperimentalAcrylicBorder Classes="Card">
+                    <StackPanel>
+                        <TextBlock Text="FCL (Poder de Ataque)" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock Text="{Binding FreeCashFlow, StringFormat='{}{0:C}'}" FontSize="24" FontWeight="Bold" Foreground="#34C759"/>
+                    </StackPanel>
+                </ExperimentalAcrylicBorder>
+
+                <WrapPanel HorizontalAlignment="Stretch">
+                    
+                    <!-- Bola de Nieve -->
+                    <ExperimentalAcrylicBorder Classes="Card" Margin="0,0,16,16" Width="300">
+                        <StackPanel Spacing="16">
+                            <StackPanel>
+                                <TextBlock Text="Estrategia: Bola de Nieve" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text="Prioriza deudas con MENOR SALDO. Victorias rápidas." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding SnowballPlan}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="api:DebtDto">
+                                        <Border Background="#1C1C1E" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                                            <Grid ColumnDefinitions="*, Auto">
+                                                <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="White" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding TotalBalance, StringFormat='{}{0:C}'}" Foreground="#FFCC00" FontWeight="Bold"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ExperimentalAcrylicBorder>
+
+                    <!-- Avalancha -->
+                    <ExperimentalAcrylicBorder Classes="Card" Margin="0,0,16,16" Width="300">
+                        <StackPanel Spacing="16">
+                            <StackPanel>
+                                <TextBlock Text="Estrategia: Avalancha" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text="Prioriza deudas con MAYOR TASA. Ahorra en intereses." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding AvalanchePlan}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="api:DebtDto">
+                                        <Border Background="#1C1C1E" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                                            <Grid ColumnDefinitions="*, Auto">
+                                                <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="White" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding AnnualInterestRate, StringFormat='{}{0:F2}%'}" Foreground="#FF3B30" FontWeight="Bold"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ExperimentalAcrylicBorder>
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

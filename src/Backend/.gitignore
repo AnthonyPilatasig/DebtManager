@@ -1,0 +1,23 @@
+# .NET Backend
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Secretos locales (redundancia)
+appsettings.Development.json
+appsettings.json
+secrets.json
+*.env
+
+# SQLite local database
+app.db
+*.sqlite
+*.db
