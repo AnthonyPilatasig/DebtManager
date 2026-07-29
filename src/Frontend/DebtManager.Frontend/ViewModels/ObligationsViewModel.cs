@@ -65,7 +65,8 @@ public partial class ObligationsViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadAllObligationsAsync()
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         IsLoading = true;
         ErrorMessage = string.Empty;
 
@@ -85,10 +86,12 @@ public partial class ObligationsViewModel : ViewModelBase
                 Dispatcher.UIThread.Post(() =>
                 {
                     Debts.Clear();
-                    foreach (var d in debtsList) Debts.Add(d);
+                    foreach (var d in debtsList)
+                        Debts.Add(d);
 
                     Expenses.Clear();
-                    foreach (var e in expensesList) Expenses.Add(e);
+                    foreach (var e in expensesList)
+                        Expenses.Add(e);
                 });
             }
         }
@@ -105,13 +108,17 @@ public partial class ObligationsViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddDebtAsync()
     {
-        if (_api == null) return;
-        if (string.IsNullOrWhiteSpace(NewDebtName)) return;
+        if (_api == null)
+            return;
+        if (string.IsNullOrWhiteSpace(NewDebtName))
+            return;
 
-        if (!decimal.TryParse(NewTotalBalance, out var balance) ||
-            !decimal.TryParse(NewMinimumPayment, out var minPayment) ||
-            !decimal.TryParse(NewInterestRate, out var interestRate) ||
-            !int.TryParse(NewDueDay, out var dueDay))
+        if (
+            !decimal.TryParse(NewTotalBalance, out var balance)
+            || !decimal.TryParse(NewMinimumPayment, out var minPayment)
+            || !decimal.TryParse(NewInterestRate, out var interestRate)
+            || !int.TryParse(NewDueDay, out var dueDay)
+        )
         {
             ErrorMessage = "Datos de deuda inválidos. Revisa los números.";
             return;
@@ -158,11 +165,15 @@ public partial class ObligationsViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddExpenseAsync()
     {
-        if (_api == null) return;
-        if (string.IsNullOrWhiteSpace(NewExpenseName)) return;
+        if (_api == null)
+            return;
+        if (string.IsNullOrWhiteSpace(NewExpenseName))
+            return;
 
-        if (!decimal.TryParse(NewExpenseAmount, out var amount) ||
-            !int.TryParse(NewExpenseDueDay, out var dueDay))
+        if (
+            !decimal.TryParse(NewExpenseAmount, out var amount)
+            || !int.TryParse(NewExpenseDueDay, out var dueDay)
+        )
         {
             ErrorMessage = "Datos de gasto inválidos. Revisa los números.";
             return;
@@ -203,7 +214,8 @@ public partial class ObligationsViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteDebtAsync(Guid id)
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         try
         {
             await _api.DeleteDebtAsync(id);
@@ -218,7 +230,8 @@ public partial class ObligationsViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteExpenseAsync(Guid id)
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         try
         {
             await _api.DeleteFixedExpenseAsync(id);

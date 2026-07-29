@@ -14,28 +14,45 @@ public static class FixedExpenseEndpoints
     {
         var group = app.MapGroup("/api/fixed-expenses").WithTags("Fixed Expenses");
 
-        group.MapPost("/", async (AddFixedExpenseCommand command, IMediator mediator) =>
-        {
-            var id = await mediator.Send(command);
-            return Results.Created($"/api/fixed-expenses/{id}", id);
-        });
+        group.MapPost(
+            "/",
+            async (AddFixedExpenseCommand command, IMediator mediator) =>
+            {
+                var id = await mediator.Send(command);
+                return Results.Created($"/api/fixed-expenses/{id}", id);
+            }
+        );
 
-        group.MapGet("/{userId}", async (Guid userId, IMediator mediator) =>
-        {
-            var expenses = await mediator.Send(new GetFixedExpensesQuery(userId));
-            return Results.Ok(expenses);
-        });
-        group.MapPut("/{id}", async (Guid id, UpdateFixedExpenseCommand command, IMediator mediator) =>
-        {
-            if (id != command.Id) return Results.BadRequest();
-            await mediator.Send(command);
-            return Results.NoContent();
-        });
+        group.MapGet(
+            "/{userId}",
+            async (Guid userId, IMediator mediator) =>
+            {
+                var expenses = await mediator.Send(new GetFixedExpensesQuery(userId));
+                return Results.Ok(expenses);
+            }
+        );
+        group.MapPut(
+            "/{id}",
+            async (Guid id, UpdateFixedExpenseCommand command, IMediator mediator) =>
+            {
+                if (id != command.Id)
+                    return Results.BadRequest();
+                await mediator.Send(command);
+                return Results.NoContent();
+            }
+        );
 
-        group.MapDelete("/{id}", async (Guid id, IMediator mediator) =>
-        {
-            await mediator.Send(new DebtManager.Application.Features.FixedExpenses.Commands.DeleteFixedExpense.DeleteFixedExpenseCommand(id));
-            return Results.NoContent();
-        });
+        group.MapDelete(
+            "/{id}",
+            async (Guid id, IMediator mediator) =>
+            {
+                await mediator.Send(
+                    new DebtManager.Application.Features.FixedExpenses.Commands.DeleteFixedExpense.DeleteFixedExpenseCommand(
+                        id
+                    )
+                );
+                return Results.NoContent();
+            }
+        );
     }
 }

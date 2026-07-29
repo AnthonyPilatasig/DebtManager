@@ -23,8 +23,6 @@ public class AppDbContext : DbContext, IAppDbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-
-
         base.OnModelCreating(modelBuilder);
     }
 }

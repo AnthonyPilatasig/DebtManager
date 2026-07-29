@@ -54,7 +54,8 @@ public partial class GoalsViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadGoalsAsync()
     {
-        if (_api == null) return;
+        if (_api == null)
+            return;
         IsLoading = true;
         ErrorMessage = string.Empty;
 
@@ -87,8 +88,10 @@ public partial class GoalsViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddGoalAsync()
     {
-        if (_api == null) return;
-        if (string.IsNullOrWhiteSpace(NewName)) return;
+        if (_api == null)
+            return;
+        if (string.IsNullOrWhiteSpace(NewName))
+            return;
 
         if (!decimal.TryParse(NewTargetAmount, out var targetAmount))
         {
@@ -97,7 +100,7 @@ public partial class GoalsViewModel : ViewModelBase
         }
 
         var type = SelectedTypeIndex == 0 ? GoalType.Savings : GoalType.Credit;
-        
+
         decimal? estimatedPayment = null;
         DateTime? targetDate = null;
 
@@ -157,8 +160,9 @@ public partial class GoalsViewModel : ViewModelBase
     [RelayCommand]
     private async Task EvaluateGoalAsync(GoalDto goal)
     {
-        if (_api == null || goal == null) return;
-        
+        if (_api == null || goal == null)
+            return;
+
         IsLoading = true;
         ErrorMessage = string.Empty;
         SelectedGoal = goal;

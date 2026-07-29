@@ -16,7 +16,10 @@ public class AddFixedExpenseCommandHandler : IRequestHandler<AddFixedExpenseComm
         _context = context;
     }
 
-    public async Task<Guid> Handle(AddFixedExpenseCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        AddFixedExpenseCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var expense = new FixedExpense(
             Guid.NewGuid(),

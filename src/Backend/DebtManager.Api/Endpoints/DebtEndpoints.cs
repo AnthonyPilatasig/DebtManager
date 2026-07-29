@@ -107,13 +107,17 @@ public static class DebtEndpoints
                 async (Guid userId, IMediator mediator) =>
                 {
                     var upcoming = await mediator.Send(
-                        new DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.GetUpcomingPaymentsQuery(userId)
+                        new DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.GetUpcomingPaymentsQuery(
+                            userId
+                        )
                     );
                     return TypedResults.Ok(upcoming);
                 }
             )
             .WithName("GetUpcomingPayments")
             .WithSummary("Obtiene los próximos pagos a realizar")
-            .Produces<List<DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.UpcomingPaymentDto>>(StatusCodes.Status200OK);
+            .Produces<
+                List<DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.UpcomingPaymentDto>
+            >(StatusCodes.Status200OK);
     }
 }

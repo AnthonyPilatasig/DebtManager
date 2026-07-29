@@ -18,23 +18,28 @@ public class GetFeasibilityQueryHandler : IRequestHandler<GetFeasibilityQuery, F
         _context = context;
     }
 
-    public async Task<FeasibilityResponse> Handle(GetFeasibilityQuery request, CancellationToken cancellationToken)
+    public async Task<FeasibilityResponse> Handle(
+        GetFeasibilityQuery request,
+        CancellationToken cancellationToken
+    )
     {
         // 1. Obtener los datos del usuario
-        var incomes = await _context.Incomes
-            .Where(i => i.UserId == request.UserId && i.IsActive && !i.IsDeleted)
+        var incomes = await _context
+            .Incomes.Where(i => i.UserId == request.UserId && i.IsActive && !i.IsDeleted)
             .ToListAsync(cancellationToken);
 
-        var debts = await _context.Debts
-            .Where(d => d.UserId == request.UserId && !d.IsDeleted)
+        var debts = await _context
+            .Debts.Where(d => d.UserId == request.UserId && !d.IsDeleted)
             .ToListAsync(cancellationToken);
 
-        var fixedExpenses = await _context.FixedExpenses
-            .Where(f => f.UserId == request.UserId && !f.IsDeleted)
+        var fixedExpenses = await _context
+            .FixedExpenses.Where(f => f.UserId == request.UserId && !f.IsDeleted)
             .ToListAsync(cancellationToken);
 
-        var goal = await _context.Goals
-            .FirstOrDefaultAsync(g => g.Id == request.GoalId && g.UserId == request.UserId && !g.IsDeleted, cancellationToken);
+        var goal = await _context.Goals.FirstOrDefaultAsync(
+            g => g.Id == request.GoalId && g.UserId == request.UserId && !g.IsDeleted,
+            cancellationToken
+        );
 
         if (goal == null)
         {
@@ -70,21 +75,27 @@ public class GetFeasibilityQueryHandler : IRequestHandler<GetFeasibilityQuery, F
                 throw new Exception("Las metas de ahorro deben tener una fecha objetivo.");
             }
 
-            var monthsToSave = ((goal.TargetDate.Value.Year - DateTime.UtcNow.Year) * 12) + goal.TargetDate.Value.Month - DateTime.UtcNow.Month;
-            if (monthsToSave <= 0) monthsToSave = 1;
+            var monthsToSave =
+                ((goal.TargetDate.Value.Year - DateTime.UtcNow.Year) * 12)
+                + goal.TargetDate.Value.Month
+                - DateTime.UtcNow.Month;
+            if (monthsToSave <= 0)
+                monthsToSave = 1;
 
             var requiredMonthlySavings = goal.TargetAmount / monthsToSave;
 
             if (freeCashFlow >= requiredMonthlySavings)
             {
                 isFeasible = true;
-                adviceMessage = $"¡Te alcanza! Necesitas ahorrar {requiredMonthlySavings:C} al mes. Te sobrarán {(freeCashFlow - requiredMonthlySavings):C} para emergencias.";
+                adviceMessage =
+                    $"¡Te alcanza! Necesitas ahorrar {requiredMonthlySavings:C} al mes. Te sobrarán {(freeCashFlow - requiredMonthlySavings):C} para emergencias.";
                 colorStatus = "Verde";
             }
             else
             {
                 isFeasible = false;
-                adviceMessage = $"No te alcanza en el tiempo establecido. Necesitas {requiredMonthlySavings:C} al mes, pero solo te sobran {freeCashFlow:C}.";
+                adviceMessage =
+                    $"No te alcanza en el tiempo establecido. Necesitas {requiredMonthlySavings:C} al mes, pero solo te sobran {freeCashFlow:C}.";
                 colorStatus = "Amarillo";
             }
         }
@@ -104,19 +115,22 @@ public class GetFeasibilityQueryHandler : IRequestHandler<GetFeasibilityQuery, F
 
                 if (remainingMargin < 0.10m)
                 {
-                    adviceMessage = $"Te alcanza para pagar {requiredPayment:C} al mes, pero tu margen de liquidez quedará por debajo del 10%. Es un riesgo alto.";
+                    adviceMessage =
+                        $"Te alcanza para pagar {requiredPayment:C} al mes, pero tu margen de liquidez quedará por debajo del 10%. Es un riesgo alto.";
                     colorStatus = "Amarillo";
                 }
                 else
                 {
-                    adviceMessage = $"¡Te alcanza! Puedes asumir la cuota de {requiredPayment:C} y aún tendrás un flujo de caja saludable.";
+                    adviceMessage =
+                        $"¡Te alcanza! Puedes asumir la cuota de {requiredPayment:C} y aún tendrás un flujo de caja saludable.";
                     colorStatus = "Verde";
                 }
             }
             else
             {
                 isFeasible = false;
-                adviceMessage = $"Peligro: No puedes asumir una cuota de {requiredPayment:C}. Tu flujo libre es solo {freeCashFlow:C}. Endeudarte asfixiará tus finanzas.";
+                adviceMessage =
+                    $"Peligro: No puedes asumir una cuota de {requiredPayment:C}. Tu flujo libre es solo {freeCashFlow:C}. Endeudarte asfixiará tus finanzas.";
                 colorStatus = "Rojo";
             }
         }

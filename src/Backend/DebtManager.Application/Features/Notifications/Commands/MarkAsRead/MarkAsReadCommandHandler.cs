@@ -17,8 +17,10 @@ public class MarkAsReadCommandHandler : IRequestHandler<MarkAsReadCommand>
 
     public async Task Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
     {
-        var notification = await _context.Notifications
-            .FirstOrDefaultAsync(n => n.Id == request.NotificationId, cancellationToken);
+        var notification = await _context.Notifications.FirstOrDefaultAsync(
+            n => n.Id == request.NotificationId,
+            cancellationToken
+        );
 
         if (notification != null)
         {

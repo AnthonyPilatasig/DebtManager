@@ -17,10 +17,13 @@ public class GetGoalsQueryHandler : IRequestHandler<GetGoalsQuery, List<GoalDto>
         _context = context;
     }
 
-    public async Task<List<GoalDto>> Handle(GetGoalsQuery request, CancellationToken cancellationToken)
+    public async Task<List<GoalDto>> Handle(
+        GetGoalsQuery request,
+        CancellationToken cancellationToken
+    )
     {
-        return await _context.Goals
-            .Where(g => g.UserId == request.UserId && !g.IsDeleted)
+        return await _context
+            .Goals.Where(g => g.UserId == request.UserId && !g.IsDeleted)
             .Select(g => new GoalDto(
                 g.Id,
                 g.Name,

@@ -29,7 +29,7 @@ public class FixedExpenseDto
 public enum GoalType
 {
     Savings, // Ahorrar para comprar de contado
-    Credit   // Comprar ahora, pagar en cuotas
+    Credit // Comprar ahora, pagar en cuotas
 }
 
 public class CreateGoalRequest

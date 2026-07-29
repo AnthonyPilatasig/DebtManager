@@ -9,7 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments;
 
-public class GetUpcomingPaymentsQueryHandler : IRequestHandler<GetUpcomingPaymentsQuery, List<UpcomingPaymentDto>>
+public class GetUpcomingPaymentsQueryHandler
+    : IRequestHandler<GetUpcomingPaymentsQuery, List<UpcomingPaymentDto>>
 {
     private readonly IAppDbContext _context;
 
@@ -18,10 +19,13 @@ public class GetUpcomingPaymentsQueryHandler : IRequestHandler<GetUpcomingPaymen
         _context = context;
     }
 
-    public async Task<List<UpcomingPaymentDto>> Handle(GetUpcomingPaymentsQuery request, CancellationToken cancellationToken)
+    public async Task<List<UpcomingPaymentDto>> Handle(
+        GetUpcomingPaymentsQuery request,
+        CancellationToken cancellationToken
+    )
     {
-        var debts = await _context.Debts
-            .Where(d => d.UserId == request.UserId && !d.IsDeleted && d.TotalBalance > 0)
+        var debts = await _context
+            .Debts.Where(d => d.UserId == request.UserId && !d.IsDeleted && d.TotalBalance > 0)
             .ToListAsync(cancellationToken);
 
         var upcomingPayments = new List<UpcomingPaymentDto>();
@@ -37,14 +41,16 @@ public class GetUpcomingPaymentsQueryHandler : IRequestHandler<GetUpcomingPaymen
             }
 
             var daysRemaining = (nextDueDate - today).Days;
-            
-            upcomingPayments.Add(new UpcomingPaymentDto(
-                debt.Id,
-                debt.Name,
-                debt.MinimumMonthlyPayment,
-                nextDueDate,
-                daysRemaining
-            ));
+
+            upcomingPayments.Add(
+                new UpcomingPaymentDto(
+                    debt.Id,
+                    debt.Name,
+                    debt.MinimumMonthlyPayment,
+                    nextDueDate,
+                    daysRemaining
+                )
+            );
         }
 
         return upcomingPayments.OrderBy(p => p.DaysRemaining).ToList();

@@ -19,7 +19,10 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Guid>
 
     public async Task<Guid> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
     {
-        var debt = await _context.Debts.FirstOrDefaultAsync(d => d.Id == request.DebtId, cancellationToken);
+        var debt = await _context.Debts.FirstOrDefaultAsync(
+            d => d.Id == request.DebtId,
+            cancellationToken
+        );
         if (debt == null)
             throw new Exception("Debt not found");
 
@@ -35,7 +38,8 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Guid>
 
         // Update Debt Balance
         var newBalance = debt.TotalBalance - request.Amount;
-        if (newBalance < 0) newBalance = 0;
+        if (newBalance < 0)
+            newBalance = 0;
 
         debt.UpdateDetails(
             debt.Name,
@@ -50,9 +54,16 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Guid>
         {
             var monthStart = new DateTime(request.PaymentDate.Year, request.PaymentDate.Month, 1);
             var monthEnd = monthStart.AddMonths(1).AddDays(-1);
-            
-            var notification = await _context.Notifications
-                .FirstOrDefaultAsync(n => n.UserId == debt.UserId && !n.IsRead && n.CreatedAt >= monthStart && n.CreatedAt <= monthEnd && n.Message.Contains(debt.Name), cancellationToken);
+
+            var notification = await _context.Notifications.FirstOrDefaultAsync(
+                n =>
+                    n.UserId == debt.UserId
+                    && !n.IsRead
+                    && n.CreatedAt >= monthStart
+                    && n.CreatedAt <= monthEnd
+                    && n.Message.Contains(debt.Name),
+                cancellationToken
+            );
 
             if (notification != null)
             {

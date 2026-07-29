@@ -18,7 +18,10 @@ public class DeleteFixedExpenseCommandHandler : IRequestHandler<DeleteFixedExpen
 
     public async Task Handle(DeleteFixedExpenseCommand request, CancellationToken cancellationToken)
     {
-        var expense = await _context.FixedExpenses.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
+        var expense = await _context.FixedExpenses.FirstOrDefaultAsync(
+            e => e.Id == request.Id,
+            cancellationToken
+        );
         if (expense != null)
         {
             _context.FixedExpenses.Remove(expense);

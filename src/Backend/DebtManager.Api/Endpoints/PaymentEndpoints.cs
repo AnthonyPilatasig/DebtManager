@@ -21,7 +21,10 @@ public static class PaymentEndpoints
                 async (AddPaymentCommand command, IMediator mediator) =>
                 {
                     var paymentId = await mediator.Send(command);
-                    return TypedResults.Created($"/api/payments/{paymentId}", new CreatePaymentResponse(paymentId));
+                    return TypedResults.Created(
+                        $"/api/payments/{paymentId}",
+                        new CreatePaymentResponse(paymentId)
+                    );
                 }
             )
             .WithName("AddPayment")

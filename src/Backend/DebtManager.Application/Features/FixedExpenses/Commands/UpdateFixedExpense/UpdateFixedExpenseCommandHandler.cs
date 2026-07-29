@@ -18,8 +18,12 @@ public class UpdateFixedExpenseCommandHandler : IRequestHandler<UpdateFixedExpen
 
     public async Task Handle(UpdateFixedExpenseCommand request, CancellationToken cancellationToken)
     {
-        var expense = await _context.FixedExpenses.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
-        if (expense == null) throw new Exception("Gasto fijo no encontrado");
+        var expense = await _context.FixedExpenses.FirstOrDefaultAsync(
+            e => e.Id == request.Id,
+            cancellationToken
+        );
+        if (expense == null)
+            throw new Exception("Gasto fijo no encontrado");
 
         expense.UpdateDetails(request.Name, request.Amount, request.DueDay);
 

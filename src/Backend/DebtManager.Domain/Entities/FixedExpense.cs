@@ -14,7 +14,8 @@ public class FixedExpense : Entity
 
     private FixedExpense() { } // EF Core
 
-    public FixedExpense(Guid id, Guid userId, string name, decimal amount, int dueDay) : base(id)
+    public FixedExpense(Guid id, Guid userId, string name, decimal amount, int dueDay)
+        : base(id)
     {
         Id = id;
         UserId = userId;

@@ -6,7 +6,7 @@ namespace DebtManager.Domain.Entities;
 public enum GoalType
 {
     Savings, // Ahorrar para comprar de contado
-    Credit   // Comprar ahora, pagar en cuotas
+    Credit // Comprar ahora, pagar en cuotas
 }
 
 public class Goal : Entity
@@ -22,7 +22,16 @@ public class Goal : Entity
 
     private Goal() { } // EF Core
 
-    public Goal(Guid id, Guid userId, string name, GoalType type, decimal targetAmount, DateTime? targetDate, decimal? estimatedMonthlyPayment) : base(id)
+    public Goal(
+        Guid id,
+        Guid userId,
+        string name,
+        GoalType type,
+        decimal targetAmount,
+        DateTime? targetDate,
+        decimal? estimatedMonthlyPayment
+    )
+        : base(id)
     {
         Id = id;
         UserId = userId;
@@ -33,7 +42,13 @@ public class Goal : Entity
         EstimatedMonthlyPayment = estimatedMonthlyPayment;
     }
 
-    public void UpdateDetails(string name, GoalType type, decimal targetAmount, DateTime? targetDate, decimal? estimatedMonthlyPayment)
+    public void UpdateDetails(
+        string name,
+        GoalType type,
+        decimal targetAmount,
+        DateTime? targetDate,
+        decimal? estimatedMonthlyPayment
+    )
     {
         Name = name;
         Type = type;

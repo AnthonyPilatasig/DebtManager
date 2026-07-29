@@ -20,7 +20,9 @@ public static class NotificationEndpoints
                 "/user/{userId:guid}/unread",
                 async (Guid userId, IMediator mediator) =>
                 {
-                    var notifications = await mediator.Send(new GetUnreadNotificationsQuery(userId));
+                    var notifications = await mediator.Send(
+                        new GetUnreadNotificationsQuery(userId)
+                    );
                     return TypedResults.Ok(notifications);
                 }
             )
