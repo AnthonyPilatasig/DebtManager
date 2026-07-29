@@ -42,4 +42,26 @@ public interface IDebtManagerApi
 
     [Delete("/api/users/{userId}")]
     Task DeleteUserAsync(Guid userId);
+
+    // Financial Planning & Goals
+    [Post("/api/fixed-expenses")]
+    Task<Guid> CreateFixedExpenseAsync([Body] CreateFixedExpenseRequest request);
+
+    [Get("/api/fixed-expenses/{userId}")]
+    Task<List<FixedExpenseDto>> GetFixedExpensesByUserAsync(Guid userId);
+
+    [Put("/api/fixed-expenses/{id}")]
+    Task UpdateFixedExpenseAsync(Guid id, [Body] UpdateFixedExpenseRequest request);
+
+    [Delete("/api/fixed-expenses/{id}")]
+    Task DeleteFixedExpenseAsync(Guid id);
+
+    [Post("/api/goals")]
+    Task<Guid> CreateGoalAsync([Body] CreateGoalRequest request);
+
+    [Get("/api/goals/{userId}")]
+    Task<List<GoalDto>> GetGoalsByUserAsync(Guid userId);
+
+    [Get("/api/goals/{userId}/feasibility/{goalId}")]
+    Task<FeasibilityResponse> GetFeasibilityAsync(Guid userId, Guid goalId);
 }

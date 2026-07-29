@@ -56,9 +56,15 @@ namespace DebtManager.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<decimal>("TotalBalance")
                         .HasPrecision(18, 4)
                         .HasColumnType("numeric(18,4)");
+
+                    b.Property<int>("TotalQuotas")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -68,35 +74,76 @@ namespace DebtManager.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Debts", (string)null);
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("20000000-0000-0000-0000-000000000001"),
-                            AnnualInterestRate = 18.5m,
-                            CutoffDay = 30,
-                            DueDay = 15,
-                            IsCreditCard = true,
-                            IsDeleted = false,
-                            LastModifiedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            MinimumMonthlyPayment = 60.00m,
-                            Name = "Tarjeta de Crédito Visa",
-                            TotalBalance = 1200.00m,
-                            UserId = new Guid("00000000-0000-0000-0000-000000000001")
-                        },
-                        new
-                        {
-                            Id = new Guid("20000000-0000-0000-0000-000000000002"),
-                            AnnualInterestRate = 12.0m,
-                            DueDay = 5,
-                            IsCreditCard = false,
-                            IsDeleted = false,
-                            LastModifiedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            MinimumMonthlyPayment = 250.00m,
-                            Name = "Préstamo Vehicular",
-                            TotalBalance = 8500.00m,
-                            UserId = new Guid("00000000-0000-0000-0000-000000000001")
-                        });
+            modelBuilder.Entity("DebtManager.Domain.Entities.FixedExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("DueDay")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FixedExpenses");
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.Goal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("EstimatedMonthlyPayment")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("TargetAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("TargetDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Goals");
                 });
 
             modelBuilder.Entity("DebtManager.Domain.Entities.Income", b =>
@@ -134,30 +181,71 @@ namespace DebtManager.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Incomes", (string)null);
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("10000000-0000-0000-0000-000000000001"),
-                            Amount = 2500.00m,
-                            Description = "Sueldo Fijo Mensual",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Type = 1,
-                            UserId = new Guid("00000000-0000-0000-0000-000000000001")
-                        },
-                        new
-                        {
-                            Id = new Guid("10000000-0000-0000-0000-000000000002"),
-                            Amount = 500.00m,
-                            Description = "Trabajos Freelance",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastModifiedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Type = 2,
-                            UserId = new Guid("00000000-0000-0000-0000-000000000001")
-                        });
+            modelBuilder.Entity("DebtManager.Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications", (string)null);
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("numeric(18,4)");
+
+                    b.Property<Guid>("DebtId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsExtraordinary")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DebtId");
+
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("DebtManager.Domain.Entities.User", b =>
@@ -191,23 +279,34 @@ namespace DebtManager.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            BaseCurrency = "USD",
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Email = "test@debtmanager.com",
-                            IsDeleted = false,
-                            LastModifiedAt = new DateTimeOffset(new DateTime(2026, 7, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
-                        });
                 });
 
             modelBuilder.Entity("DebtManager.Domain.Entities.Debt", b =>
                 {
                     b.HasOne("DebtManager.Domain.Entities.User", "User")
                         .WithMany("Debts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.FixedExpense", b =>
+                {
+                    b.HasOne("DebtManager.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.Goal", b =>
+                {
+                    b.HasOne("DebtManager.Domain.Entities.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -226,11 +325,40 @@ namespace DebtManager.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DebtManager.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("DebtManager.Domain.Entities.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("DebtManager.Domain.Entities.Debt", "Debt")
+                        .WithMany("Payments")
+                        .HasForeignKey("DebtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Debt");
+                });
+
+            modelBuilder.Entity("DebtManager.Domain.Entities.Debt", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
             modelBuilder.Entity("DebtManager.Domain.Entities.User", b =>
                 {
                     b.Navigation("Debts");
 
                     b.Navigation("Incomes");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

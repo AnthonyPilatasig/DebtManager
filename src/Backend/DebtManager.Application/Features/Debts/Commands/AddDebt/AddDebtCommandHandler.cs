@@ -27,6 +27,8 @@ public class AddDebtCommandHandler : IRequestHandler<AddDebtCommand, Guid>
             request.AnnualInterestRate,
             request.DueDay,
             request.IsCreditCard,
+            request.TotalQuotas,
+            DateTime.UtcNow,
             request.CutoffDay
         );
 

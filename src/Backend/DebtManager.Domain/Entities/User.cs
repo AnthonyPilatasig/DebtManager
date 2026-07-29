@@ -13,6 +13,7 @@ public sealed class User : Entity
     // Navegación EF Core
     public ICollection<Income> Incomes { get; private set; } = new List<Income>();
     public ICollection<Debt> Debts { get; private set; } = new List<Debt>();
+    public ICollection<Notification> Notifications { get; private set; } = new List<Notification>();
 
     private User() { } // Para EF Core
 

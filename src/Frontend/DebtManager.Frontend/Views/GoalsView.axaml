@@ -1,0 +1,103 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             xmlns:converters="using:DebtManager.Frontend.Converters"
+             x:Class="DebtManager.Frontend.Views.GoalsView"
+             x:DataType="vm:GoalsViewModel">
+
+    <UserControl.Resources>
+        <converters:IndexToVisibilityConverter x:Key="IndexToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="🎯 Asesor de Metas Financieras" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,16"/>
+        
+        <Grid Grid.Row="1" ColumnDefinitions="*, 400">
+            <!-- Columna Izquierda: Lista de Metas y Evaluación (Semáforo) -->
+            <Grid Grid.Column="0" RowDefinitions="*, Auto" Margin="0,0,16,0">
+                <ScrollViewer Grid.Row="0">
+                    <ItemsControl ItemsSource="{Binding Goals}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ExperimentalAcrylicBorder Classes="Card" Margin="0,0,0,12">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="{Binding Type, StringFormat='Tipo: {0}'}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock Text="{Binding TargetAmount, StringFormat='Monto: {0:N2}'}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                        <Button Grid.Column="1" 
+                                                Content="Evaluar Viabilidad" 
+                                                Command="{Binding $parent[UserControl].((vm:GoalsViewModel)DataContext).EvaluateGoalCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="{StaticResource PrimaryBrush}" 
+                                                Foreground="White"
+                                                VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ExperimentalAcrylicBorder>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Panel del Semáforo (Visible al evaluar) -->
+                <ExperimentalAcrylicBorder Grid.Row="1" Classes="Card" Margin="0,16,0,0" IsVisible="{Binding FeasibilityResult, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Resultado de Evaluación" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                        
+                        <Border CornerRadius="8" Padding="16"
+                                Background="{Binding FeasibilityResult.ColorStatus, Converter={StaticResource TrafficLightColorConverter}}">
+                            <!-- TODO: Convertidor de color para el semáforo -->
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="{Binding FeasibilityResult.ColorStatus}" FontSize="24" FontWeight="Black" HorizontalAlignment="Center"
+                                           Foreground="White"/>
+                                <TextBlock Text="{Binding FeasibilityResult.AdviceMessage}" FontSize="16" TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                <TextBlock Text="{Binding FeasibilityResult.FreeCashFlow, StringFormat='Flujo Libre Mensual: C {0:N2}'}" FontSize="16" Foreground="White" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ExperimentalAcrylicBorder>
+            </Grid>
+
+            <!-- Columna Derecha: Agregar Nueva Meta -->
+            <ExperimentalAcrylicBorder Grid.Column="1" Classes="Card" VerticalAlignment="Top">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Nueva Meta" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource CriticalBrush}" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                    <TextBox Watermark="Nombre de la Meta (Ej. PS5, Carro)" Text="{Binding NewName}" Height="44" Background="#2C2C2E" Foreground="White"/>
+                    
+                    <ComboBox SelectedIndex="{Binding SelectedTypeIndex}" HorizontalAlignment="Stretch" Height="44" Background="#2C2C2E">
+                        <ComboBoxItem Content="Ahorrar para comprar (Contado)"/>
+                        <ComboBoxItem Content="Comprar ahora (Crédito/Cuotas)"/>
+                    </ComboBox>
+                    
+                    <TextBox Watermark="Costo Total" Text="{Binding NewTargetAmount}" Height="44" Background="#2C2C2E" Foreground="White"/>
+                    
+                    <!-- Para Ahorro -->
+                    <StackPanel Spacing="8" IsVisible="{Binding SelectedTypeIndex, Converter={StaticResource IndexToVisibilityConverter}, ConverterParameter=0}">
+                        <TextBlock Text="Fecha Objetivo (Cuándo lo quieres)" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <DatePicker SelectedDate="{Binding NewTargetDate}" HorizontalAlignment="Stretch" Background="#2C2C2E"/>
+                    </StackPanel>
+
+                    <!-- Para Crédito -->
+                    <StackPanel Spacing="8" IsVisible="{Binding SelectedTypeIndex, Converter={StaticResource IndexToVisibilityConverter}, ConverterParameter=1}">
+                        <TextBox Watermark="Cuota Mensual Estimada" Text="{Binding NewEstimatedPayment}" Height="44" Background="#2C2C2E" Foreground="White"/>
+                    </StackPanel>
+
+                    <Button Content="Registrar Meta" 
+                            Command="{Binding AddGoalCommand}" 
+                            Background="{StaticResource SecondaryBrush}" 
+                            Foreground="White"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"/>
+                            
+                    <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" Margin="0,8,0,0"/>
+                </StackPanel>
+            </ExperimentalAcrylicBorder>
+        </Grid>
+    </Grid>
+</UserControl>

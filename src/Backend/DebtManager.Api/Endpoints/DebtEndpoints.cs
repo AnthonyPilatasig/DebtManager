@@ -100,5 +100,20 @@ public static class DebtEndpoints
             )
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status404NotFound);
+
+        group
+            .MapGet(
+                "/user/{userId:guid}/upcoming",
+                async (Guid userId, IMediator mediator) =>
+                {
+                    var upcoming = await mediator.Send(
+                        new DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.GetUpcomingPaymentsQuery(userId)
+                    );
+                    return TypedResults.Ok(upcoming);
+                }
+            )
+            .WithName("GetUpcomingPayments")
+            .WithSummary("Obtiene los próximos pagos a realizar")
+            .Produces<List<DebtManager.Application.Features.Debts.Queries.GetUpcomingPayments.UpcomingPaymentDto>>(StatusCodes.Status200OK);
     }
 }

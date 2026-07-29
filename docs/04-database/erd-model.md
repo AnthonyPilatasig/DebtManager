@@ -1,46 +1,75 @@
 # Modelo Entidad-Relación (ERD)
 
-Este es el modelo de datos núcleo relacional, optimizado para ser orquestado mediante Entity Framework Core, respetando la 3ra Forma Normal.
+Este es el modelo de datos núcleo relacional, optimizado para ser orquestado mediante Entity Framework Core, respetando la 3ra Forma Normal. Incluye las actualizaciones de la Fase 2 (Control Exhaustivo) y Fase 3 (Asesor Financiero).
 
 ```mermaid
 erDiagram
     USUARIO {
         uuid Id PK
-        string Nombre
         string Email
-        string PasswordHash
-        datetime FechaRegistro
+        string BaseCurrency
     }
     
     INGRESO {
         uuid Id PK
-        uuid UsuarioId FK
-        string Concepto
-        decimal MontoMensual
-        string Moneda "ISO 4217"
+        uuid UserId FK
+        string Description
+        decimal Amount
+        int Type "0=Fixed, 1=Variable"
     }
     
     DEUDA {
         uuid Id PK
-        uuid UsuarioId FK
-        string Nombre
-        decimal SaldoTotal
-        decimal CuotaMinimaMensual
-        decimal TasaInteresAnual "APR %"
-        string Tipo "FIJA o VARIABLE"
-        int DiaVencimiento
+        uuid UserId FK
+        string Name
+        decimal TotalBalance
+        decimal MinimumMonthlyPayment
+        decimal AnnualInterestRate
+        int DueDay
+        bool IsCreditCard
+        int CutoffDay
+        int TotalQuotas
+        datetime StartDate
     }
-    
-    PLAN_DESENDEUDAMIENTO {
+
+    PAGO {
         uuid Id PK
-        uuid UsuarioId FK
-        string Estrategia "SNOWBALL o AVALANCHE"
-        decimal FCLAsignadoMensual
-        datetime FechaCalculo
+        uuid DebtId FK
+        decimal Amount
+        datetime PaymentDate
+        bool IsExtraordinary
+    }
+
+    NOTIFICACION {
+        uuid Id PK
+        uuid UserId FK
+        string Message
+        bool IsRead
+    }
+
+    GASTO_FIJO {
+        uuid Id PK
+        uuid UserId FK
+        string Name
+        decimal Amount
+        int DueDay
+    }
+
+    META {
+        uuid Id PK
+        uuid UserId FK
+        string Name
+        int Type "0=Savings, 1=Credit"
+        decimal TargetAmount
+        datetime TargetDate
+        decimal EstimatedMonthlyPayment
     }
 
     %% Relaciones Principales
     USUARIO ||--o{ INGRESO : registra
     USUARIO ||--o{ DEUDA : debe
-    USUARIO ||--o{ PLAN_DESENDEUDAMIENTO : genera
+    USUARIO ||--o{ NOTIFICACION : recibe
+    USUARIO ||--o{ GASTO_FIJO : tiene
+    USUARIO ||--o{ META : planifica
+    DEUDA ||--o{ PAGO : abona
 ```

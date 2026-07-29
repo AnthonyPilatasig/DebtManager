@@ -11,5 +11,6 @@ public record AddDebtCommand(
     decimal AnnualInterestRate,
     int DueDay,
     bool IsCreditCard,
+    int TotalQuotas,
     int? CutoffDay
 ) : IRequest<Guid>;

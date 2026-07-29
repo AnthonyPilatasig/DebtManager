@@ -1,0 +1,107 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DebtManager.Frontend.ViewModels"
+             x:Class="DebtManager.Frontend.Views.ObligationsView"
+             x:DataType="vm:ObligationsViewModel">
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Header -->
+        <Border Grid.Row="0" Classes="Card" Margin="0,0,0,20">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Mis Obligaciones Mensuales" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                <TextBlock Text="Agrupa tus deudas financieras y gastos de servicios." 
+                           FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource CriticalBrush}" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1">
+            <Grid ColumnDefinitions="*, *">
+                <!-- Columna Izquierda: Gastos Fijos -->
+                <StackPanel Grid.Column="0" Spacing="20" Margin="0,0,10,0">
+                    <Border Classes="Card" Background="#1C1C1E">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Servicios y Gastos (Agua, Luz, etc.)" FontSize="20" FontWeight="SemiBold" Foreground="White"/>
+                            
+                            <TextBox PlaceholderText="Nombre del Gasto (ej. Luz)" Text="{Binding NewExpenseName}" Height="44" Background="#2C2C2E" Foreground="White"/>
+                            
+                            <Grid ColumnDefinitions="*, *">
+                                <TextBox Grid.Column="0" PlaceholderText="Presupuesto Estimado" Text="{Binding NewExpenseAmount}" Height="44" Margin="0,0,5,0" Background="#2C2C2E" Foreground="White"/>
+                                <TextBox Grid.Column="1" PlaceholderText="Día de Pago (1-31)" Text="{Binding NewExpenseDueDay}" Height="44" Margin="5,0,0,0" Background="#2C2C2E" Foreground="White"/>
+                            </Grid>
+
+                            <Button Content="Añadir Servicio" Command="{Binding AddExpenseCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource PrimaryBrush}" Foreground="White"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Lista de Gastos Fijos -->
+                    <ItemsControl ItemsSource="{Binding Expenses}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="Card" Margin="0,0,0,10" Background="#2C2C2E">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                            <TextBlock Text="{Binding Amount, StringFormat='Presupuesto: ${0}'}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding DueDay, StringFormat='Día {0}'}" FontSize="14" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- Columna Derecha: Deudas -->
+                <StackPanel Grid.Column="1" Spacing="20" Margin="10,0,0,0">
+                    <Border Classes="Card" Background="#1C1C1E">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Deudas (Tarjetas, Préstamos)" FontSize="20" FontWeight="SemiBold" Foreground="White"/>
+                            
+                            <TextBox PlaceholderText="Nombre de la Deuda" Text="{Binding NewDebtName}" Height="44" Background="#2C2C2E" Foreground="White"/>
+                            
+                            <Grid ColumnDefinitions="*, *">
+                                <TextBox Grid.Column="0" PlaceholderText="Saldo Total ($)" Text="{Binding NewTotalBalance}" Height="44" Margin="0,0,5,0" Background="#2C2C2E" Foreground="White"/>
+                                <TextBox Grid.Column="1" PlaceholderText="Cuota Mínima ($)" Text="{Binding NewMinimumPayment}" Height="44" Margin="5,0,0,0" Background="#2C2C2E" Foreground="White"/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*, *">
+                                <TextBox Grid.Column="0" PlaceholderText="Interés Anual (%)" Text="{Binding NewInterestRate}" Height="44" Margin="0,0,5,0" Background="#2C2C2E" Foreground="White"/>
+                                <TextBox Grid.Column="1" PlaceholderText="Día de Pago (1-31)" Text="{Binding NewDueDay}" Height="44" Margin="5,0,0,0" Background="#2C2C2E" Foreground="White"/>
+                            </Grid>
+                            
+                            <CheckBox Content="¿Es Tarjeta de Crédito?" IsChecked="{Binding IsCreditCard}" Foreground="White"/>
+
+                            <Button Content="Añadir Deuda" Command="{Binding AddDebtCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource PrimaryBrush}" Foreground="White"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Lista de Deudas -->
+                    <ItemsControl ItemsSource="{Binding Debts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="Card" Margin="0,0,0,10" Background="#2C2C2E">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                            <TextBlock Text="{Binding TotalBalance, StringFormat='Saldo: ${0}'}" Foreground="{StaticResource CriticalBrush}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding MinimumMonthlyPayment, StringFormat='Cuota Mínima: ${0}'}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding DueDay, StringFormat='Día {0}'}" FontSize="14" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

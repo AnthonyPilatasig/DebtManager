@@ -48,8 +48,8 @@
                             Height="48"
                             CornerRadius="8"/>
                             
-                    <Button Content="💳 Deudas" 
-                            Command="{Binding NavigateToDebtsCommand}" 
+                    <Button Content="💳 Mis Obligaciones" 
+                            Command="{Binding NavigateToObligationsCommand}" 
                             HorizontalAlignment="Stretch" 
                             Background="Transparent"
                             Height="48"
@@ -57,6 +57,14 @@
                             
                     <Button Content="📈 Estadísticas" 
                             Command="{Binding NavigateToStatisticsCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            Background="Transparent"
+                            Height="48"
+                            CornerRadius="8"/>
+
+
+                    <Button Content="🎯 Asesor / Metas" 
+                            Command="{Binding NavigateToGoalsCommand}" 
                             HorizontalAlignment="Stretch" 
                             Background="Transparent"
                             Height="48"

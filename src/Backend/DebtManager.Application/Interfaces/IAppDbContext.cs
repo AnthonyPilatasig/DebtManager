@@ -9,6 +9,10 @@ public interface IAppDbContext
 {
     DbSet<User> Users { get; }
     DbSet<Income> Incomes { get; }
-    DbSet<Debt> Debts { get; }
+    DbSet<Debt> Debts { get; set; }
+    DbSet<Payment> Payments { get; set; }
+    DbSet<Notification> Notifications { get; set; }
+    DbSet<FixedExpense> FixedExpenses { get; set; }
+    DbSet<Goal> Goals { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

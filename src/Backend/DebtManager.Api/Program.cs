@@ -93,5 +93,16 @@ app.MapUserEndpoints();
 app.MapCashFlowEndpoints();
 app.MapDebtEndpoints();
 app.MapIncomeEndpoints();
+app.MapPaymentEndpoints();
+app.MapNotificationEndpoints();
+app.MapFixedExpenseEndpoints();
+app.MapGoalEndpoints();
+
+// 6. Ejecutar Data Seeder de manera segura
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DbSeeder.SeedAsync(dbContext);
+}
 
 app.Run();

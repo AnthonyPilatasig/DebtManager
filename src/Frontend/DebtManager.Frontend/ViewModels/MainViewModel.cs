@@ -44,13 +44,16 @@ public partial class MainViewModel : ViewModelBase
     private void NavigateToDashboard() => CurrentPage = new DashboardViewModel(_api);
 
     [RelayCommand]
-    private void NavigateToDebts() => CurrentPage = new DebtsViewModel(_api);
+    private void NavigateToObligations() => CurrentPage = new ObligationsViewModel(_api);
 
     [RelayCommand]
     private void NavigateToStatistics() => CurrentPage = new StatisticsViewModel(_api);
 
     [RelayCommand]
     private void NavigateToSettings() => CurrentPage = new SettingsViewModel(_api, Logout);
+
+    [RelayCommand]
+    private void NavigateToGoals() => CurrentPage = new GoalsViewModel(_api);
 
     [RelayCommand]
     private void TogglePane() => IsPaneOpen = !IsPaneOpen;
